@@ -36,14 +36,14 @@ spaces_working_env(add_spaces_to_sysroot=True,inherit_terminal=True)
 
 cmake_add_configure_build_install(
     "cpp",
-    source_directory = "cpp",
+    source_directory = "rust-cpp-showdown/cpp",
     skip_install = True,
 )
 
 run_add_exec(
     "run",
     type = RUN_TYPE_ALL,
-    deps = ["cpp", "check_vscode"],
+    deps = ["cpp"],
     help = "Run the build/hello binary",
     log_level = "Passthrough",
     command = "build/cpp/cpp",
