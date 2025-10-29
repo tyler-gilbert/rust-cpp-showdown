@@ -63,7 +63,6 @@ run_add_exec(
 
 run_add_exec(
     "run_cpp",
-    type = RUN_TYPE_ALL,
     deps = ["cpp"],
     help = "Run the build/hello binary",
     log_level = "Passthrough",
@@ -73,4 +72,5 @@ run_add_exec(
 run_add_target(
     "run",
     deps = ["run_cpp", "run_rust"],
+    type = RUN_TYPE_ALL,
 )
