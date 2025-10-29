@@ -8,6 +8,7 @@ load("//@star/sdk/star/shell.star", "ls")
 load("//@star/packages/star/llvm.star", "llvm_add")
 load("//@star/packages/star/rust.star", "rust_add")
 load("//@star/packages/star/cmake.star", "cmake_add")
+load("//@star/packages/star/buildifier.star", "buildifier_add")
 load("//@star/packages/star/package.star", "package_add")
 load(
     "//@star/sdk/star/checkout.star",
@@ -21,13 +22,15 @@ load(
     "RUN_TYPE_ALL",
     "run_add_exec",
 )
-load("//@star/sdk/star/info.star", "info_set_minimum_version")
+load("//@star/sdk/star/info.star", "info_set_minimum_version", "info_get_path_to_store")
+load("//@star/sdk/star/ws.star", "workspace_get_absolute_path")
 
 info_set_minimum_version("0.15.4")
 
 cmake_add("cmake3", "v3.30.5")
 package_add("github.com", "ninja-build", "ninja", "v1.12.1")
 rust_add("rust1", "1.90")
+buildifier_add("buildifier8", "v8.2.1")
 
 llvm_add(
     "llvm19",
@@ -45,6 +48,7 @@ checkout_update_asset(
         "lsp": {
             "clangd": {
                 "binary": {
+                    "path": "{}/sysroot/bin/clangd".format(workspace_get_absolute_path()),
                     "arguments": [
                         "--compile-commands-dir=build/cpp",
                         "--query-driver=**usr/bin/**"
