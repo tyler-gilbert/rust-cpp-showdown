@@ -12,6 +12,7 @@ load("//@star/packages/star/package.star", "package_add")
 load(
     "//@star/sdk/star/checkout.star",
     "checkout_add_asset",
+    "checkout_update_asset",
 )
 load(
     "//@star/sdk/star/run.star",
@@ -36,6 +37,30 @@ llvm_add(
 
 # basic spaces environment - adds /usr/bin and /bin to PATH
 spaces_working_env(add_spaces_to_sysroot=True, inherit_terminal=True)
+
+checkout_update_asset(
+    "zed_settings",
+    destination = ".zed/settings.json",
+    value = {
+        "lsp": {
+            "clangd": {
+                "binary": {
+                    "arguments": [
+                        "--compile-commands-dir=build/cpp",
+                        "--query-driver=**usr/bin/**"
+                    ]
+                }
+            }
+        },
+        "languages": {
+            "Starlark": {
+                "language_servers": ["!buck2-lsp", "!starpls", "!tilt"],
+                "tab_size": 4
+            }
+        }
+    },
+)
+
 
 cmake_add_configure_build_install(
     "cpp",
