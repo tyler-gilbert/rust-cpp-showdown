@@ -6,6 +6,7 @@ load("//@star/sdk/star/spaces-env.star", "spaces_working_env")
 load("//@star/sdk/star/cmake.star", "cmake_add_configure_build_install")
 load("//@star/sdk/star/shell.star", "ls")
 load("//@star/packages/star/llvm.star", "llvm_add")
+load("//@star/packages/star/rust.star", "rust_add")
 load("//@star/packages/star/cmake.star", "cmake_add")
 load("//@star/packages/star/package.star", "package_add")
 load(
@@ -14,6 +15,7 @@ load(
 )
 load(
     "//@star/sdk/star/run.star",
+    "run_add_target",
     "RUN_LOG_LEVEL_APP",
     "RUN_TYPE_ALL",
     "run_add_exec",
@@ -24,6 +26,7 @@ info_set_minimum_version("0.15.4")
 
 cmake_add("cmake3", "v3.30.5")
 package_add("github.com", "ninja-build", "ninja", "v1.12.1")
+rust_add("rust1", "1.90")
 
 llvm_add(
     "llvm19",
@@ -32,7 +35,7 @@ llvm_add(
 )
 
 # basic spaces environment - adds /usr/bin and /bin to PATH
-spaces_working_env(add_spaces_to_sysroot=True,inherit_terminal=True)
+spaces_working_env(add_spaces_to_sysroot=True, inherit_terminal=True)
 
 cmake_add_configure_build_install(
     "cpp",
@@ -41,10 +44,33 @@ cmake_add_configure_build_install(
 )
 
 run_add_exec(
-    "run",
+    "build_rust",
+    command = "cargo",
+    args = ["build"],
+    help = "Run the build/hello binary",
+    working_directory = "./rust"
+)
+
+run_add_exec(
+    "run_rust",
+    command = "target/debug/rust",
+    help = "Run the build/hello binary",
+    log_level = "Passthrough",
+    deps = ["build_rust"],
+    working_directory = "./rust"
+)
+
+
+run_add_exec(
+    "run_cpp",
     type = RUN_TYPE_ALL,
     deps = ["cpp"],
     help = "Run the build/hello binary",
     log_level = "Passthrough",
     command = "build/cpp/cpp",
+)
+
+run_add_target(
+    "run",
+    deps = ["run_cpp", "run_rust"],
 )
