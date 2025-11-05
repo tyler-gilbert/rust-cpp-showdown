@@ -9,6 +9,7 @@ load("//@star/packages/star/llvm.star", "llvm_add")
 load("//@star/packages/star/rust.star", "rust_add")
 load("//@star/packages/star/cmake.star", "cmake_add")
 load("//@star/packages/star/buildifier.star", "buildifier_add")
+load("//@star/packages/star/starship.star", "starship_add_bash")
 load("//@star/packages/star/package.star", "package_add")
 load(
     "//@star/sdk/star/checkout.star",
@@ -40,6 +41,8 @@ llvm_add(
 
 # basic spaces environment - adds /usr/bin and /bin to PATH
 spaces_working_env(add_spaces_to_sysroot=True, inherit_terminal=True)
+
+starship_add_bash("starship_bash", shortcuts = {})
 
 checkout_update_asset(
     "zed_settings",
